@@ -1,7 +1,7 @@
 # BSc CS (Hons. & Research) [Semester 1]
 
 The source code of this project is available under the [`src`](./src) directory.
-Feel free to make any relevant changes to my code.
+Other useful resources are found under the [`res`](./res) directory.
 
 ## Coding Environment
 
