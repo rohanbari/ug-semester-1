@@ -1,8 +1,8 @@
 /**
- * @file 3.c
+ * @file 4.c
  * @author Rohan Bari <rohanbari4@gmail.com>
  * @brief WAP to compute the sum of the first n terms of the following series,
- * S = 1+ 1/2 + 1/3 + 1/4 + ...
+ * S = 1 - 2 + 3 - 4 + 5 - ...
  * @version 0.1
  * @date 29-07-2023
  * 
@@ -16,23 +16,35 @@
 #define EXIT_FAILURE 1
 
 /**
- * @brief Displays the geometric progression sum of up to N terms.
+ * @brief Evaluates the sign of a given number.
+ * 
+ * @param num The number
+ * @return +1 or -1
+ */
+short int sign(const int num) {
+    // Returns +1 if +ve, -1 if -ve
+    return ((num % 2 == 0) ? -1 : 1);
+}
+
+/**
+ * @brief Calculates the sum.
  * 
  * @param n Number of terms
+ * @return  Summation
  */
-double calc_gp_sum(const int n) {
-    double sum = 0.0;
+int calc_sum(const int n) {
+    int sum = 0;
 
     for (int i = 1; i <= n; i++)
-        sum += 1.0 / i;
+        sum += sign(i) * i;
 
     return sum;
 }
 
-int main(void) {
+int main() {
     int input = 0;
 
-    fprintf(stdout, "Number of terms to add up to: ");
+    fprintf(stdout, "Enter the number of terms: ");
 
     // Input validation
     if (fscanf(stdin, "%d", &input) != 1) {
@@ -40,13 +52,8 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    if (input <= 0) {
-        fprintf(stderr, "error: The number of terms must be a +ve integer.\n");
-        return EXIT_FAILURE;
-    }
-
-    double result = calc_gp_sum(input);
-    fprintf(stdout, "G.P. Sum: %.3lf\n", result);
+    int result = calc_sum(input);
+    fprintf(stdout, "Sum: %d\n", result);
 
     return EXIT_SUCCESS;
 }
