@@ -1,4 +1,4 @@
-# BSc CS (Hons. & Research) [Semester 1]
+# BSc CS (Major & Research) [Semester 1]
 
 The source code of this project is available under the [`src`](./src) directory.
 Other useful resources are found under the [`res`](./res) directory.
