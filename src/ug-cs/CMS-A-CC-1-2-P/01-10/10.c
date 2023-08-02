@@ -9,10 +9,9 @@
  * 
  */
 
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#define MAX_LEN 1024
 
 // Custom Boolean type
 typedef enum { false, true } bool;
@@ -89,6 +88,11 @@ bool init_arrays() {
         // Input validation
         if (fscanf(stdin, "%d", &input) != 1) {
             fprintf(stderr, "error: Invalid integer.\n");
+
+            // Resetting values
+            array_size = 0;
+            array = NULL;
+
             return 1;
         }
 
@@ -102,11 +106,10 @@ bool print_even_elems() {
     if (len_check())
         return 1;
 
-    for (int i = 0; i < array_size; i++) {
-        if (array[i] % 2 == 0) {
+    for (int i = 0; i < array_size; i++)
+        if (array[i] % 2 == 0)
             fprintf(stdout, "%d ", array[i]);
-        }
-    }
+
     fputc('\n', stdout);
 
     return 0;
@@ -116,11 +119,10 @@ bool print_odd_elems() {
     if (len_check())
         return 1;
 
-    for (int i = 0; i < array_size; i++) {
-        if (array[i] % 2 == 1) {
+    for (int i = 0; i < array_size; i++)
+        if (array[i] % 2 == 1)
             fprintf(stdout, "%d ", array[i]);
-        }
-    }
+
     fputc('\n', stdout);
 
     return 0;
@@ -147,6 +149,18 @@ bool print_max_min() {
     if (len_check())
         return 1;
 
+    int min = INT_MIN;
+    int max = INT_MAX;
+
+    for (int i = 0; i < array_size; i++) {
+        if (array[i] > min)
+            min = array[i];
+        if (array[i] < max)
+            max = array[i];
+    }
+
+    fprintf(stdout, "The min element is %d and max is %d.\n", min, max);
+
     return 0;
 }
 
@@ -165,6 +179,33 @@ bool print_reverse_order() {
 bool remove_dupes() {
     if (len_check())
         return 1;
+
+    if (array_size == 1)
+        fprintf(stdout, "%d\n", array[0]);
+
+    // Careful! array_size is a global variable.
+    // For the sake of not altering the value globally, I used a temp variable.
+    int temp_size = array_size;
+    int *temp_array = (void *)malloc(sizeof(int) * temp_size);
+
+    for (int i = 0; i < temp_size; i++)
+        temp_array[i] = array[i];
+
+    // Duplicate removal algorithm
+    for (int idx = 0; idx < temp_size; idx++)
+        for (int sub_idx = idx + 1; sub_idx < temp_size; sub_idx++)
+            if (temp_array[idx] == temp_array[sub_idx]) {
+                for (int k = sub_idx; k < temp_size; k++)
+                    temp_array[k] = temp_array[k + 1];
+
+                sub_idx--;
+                temp_size--;
+            }
+
+    for (int i = 0; i < temp_size; i++)
+        fprintf(stdout, "%d ", temp_array[i]);
+
+    fputc('\n', stdout);
 
     return 0;
 }
