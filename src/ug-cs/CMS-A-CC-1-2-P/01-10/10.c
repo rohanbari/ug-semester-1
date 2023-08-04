@@ -49,6 +49,10 @@ bool len_check() {
     return 0;
 }
 
+/**
+ * @brief Clears the output screen.
+ * 
+ */
 void clear_screen(void) {
     if (system("@cls||clear") != EXIT_SUCCESS) {
         fprintf(stderr, "error: Failed to clear screen.\n");
@@ -56,6 +60,10 @@ void clear_screen(void) {
     }
 }
 
+/**
+ * @brief Discards extra input buffer.
+ * 
+ */
 void discard_newlines(void) {
     int n;
     while ((n = getchar()) != '\n' && n != EOF)
