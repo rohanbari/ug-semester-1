@@ -9,6 +9,7 @@
  * 
  */
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -84,8 +85,7 @@ bool concat_str_strcat(void) {
         return false;
     }
 
-    strcat(full_str, str2);
-    strcat(full_str, str1);
+    sprintf(full_str, "%s%s", str1, str2);
 
     fprintf(stdout, "Joined strings: %s\n", full_str);
     return true;
@@ -144,10 +144,52 @@ bool calc_strlen(void) {
 }
 
 bool conv_lower_to_upper(void) {
+    char input[MAX_LEN];
+
+    fprintf(stdout, "Input a string: ");
+
+    if (fgets(input, sizeof input, stdin) == NULL) {
+        fprintf(stderr, "error: Invalid data.\n");
+        return false;
+    }
+
+    size_t idx = 0;
+    while (input[idx] != 0) {
+        input[idx] = toupper(input[idx]);
+        idx++;
+    }
+    input[idx - 1] = 0;
+
+    fprintf(stdout, "The modified string: %s\n", input);
+
     return true;
 }
 
 bool calc_vowels(void) {
+    char input[MAX_LEN];
+
+    fprintf(stdout, "Input a string: ");
+
+    if (fgets(input, sizeof input, stdin) == NULL) {
+        fprintf(stderr, "error: Invalid data.\n");
+        return false;
+    }
+
+    size_t idx = 0;
+    size_t len = 0;
+    while (input[idx] != 0) {
+        char ch = tolower(input[idx]);
+        if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u') {
+            idx++;
+            len++;
+        } else {
+            idx++;
+            continue;
+        }
+    }
+
+    fprintf(stdout, "The string has %ld vowels.\n", (len - 1));
+
     return true;
 }
 
