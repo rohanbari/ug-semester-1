@@ -11,19 +11,63 @@
  * 
  */
 
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #define MAX_SIZE 10
 
-void display_asc(const int *p) {
+/**
+ * @brief Displays the loop on the screen.
+ * 
+ * @param p The array
+ */
+void display_loop(int *p) {
+    for (int i = 0; i < MAX_SIZE; i++)
+        fprintf(stdout, "%d ", p[i]);
+
+    fputc('\n', stdout);
 }
 
-void display_dsc(const int *p) {
+/**
+ * @brief Displays the array in ascending order.
+ * 
+ * @param p The array
+ */
+void display_asc(int *p) {
+    for (int i = 0; i < MAX_SIZE; i++) {
+        for (int j = i + 1; j < MAX_SIZE; j++) {
+            if (p[i] > p[j]) {
+                int temp = p[i];
+                p[i] = p[j];
+                p[j] = temp;
+            }
+        }
+    }
+
+    display_loop(p);
+}
+
+/**
+ * @brief Displays the array in descending order.
+ * 
+ * @param p The array
+ */
+void display_dsc(int *p) {
+    for (int i = 0; i < MAX_SIZE; i++) {
+        for (int j = i + 1; j < MAX_SIZE; j++) {
+            if (p[i] < p[j]) {
+                int temp = p[i];
+                p[i] = p[j];
+                p[j] = temp;
+            }
+        }
+    }
+
+    display_loop(p);
 }
 
 int main(void) {
+    // Allocating 40-bytes of memory by default
     int *array = (void *)malloc((sizeof(int) * MAX_SIZE));
 
     // Memory allocation safety net
@@ -34,6 +78,7 @@ int main(void) {
 
     fprintf(stdout, "Input ten integers (sep. by space): ");
 
+    // Assign values to the array
     for (int i = 0; i < MAX_SIZE; i++) {
         int input = 0;
         if (fscanf(stdin, "%d", &input) != 1) {

@@ -64,7 +64,7 @@ void clear_screen(void) {
  * @brief Discards extra input buffer.
  * 
  */
-void discard_newlines(void) {
+void discard_buffer(void) {
     int n;
     while ((n = getchar()) != '\n' && n != EOF)
         ;
@@ -237,7 +237,7 @@ int main(void) {
         int input = 0;
         if (fscanf(stdin, "%d", &input) != 1) {
             fprintf(stderr, "\nerror: Invalid input.\n");
-            discard_newlines();
+            discard_buffer();
             getchar();
 
             continue;
@@ -276,7 +276,7 @@ int main(void) {
                 break;
         }
 
-        discard_newlines();
+        discard_buffer();
 
         if (status)
             fprintf(stderr, "warn: Execution abnormally failed.\n");

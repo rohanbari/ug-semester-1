@@ -37,7 +37,7 @@ void clear_screen(void) {
     }
 }
 
-void discard_newlines(void) {
+void discard_buffer(void) {
     int n;
     while ((n = getchar()) != '\n' && n != EOF)
         ;
@@ -53,9 +53,8 @@ bool disp_mem_addr(void) {
         return false;
     }
 
-    discard_newlines();
     for (size_t i = 0, len = strlen(input); i < len; i++)
-        fprintf(stdout, "Index %ld has memory address %p.\n", i, &input[i]);
+        fprintf(stdout, "Index %4ld has memory address %p\n", i, &input[i]);
 
     return true;
 }
@@ -76,7 +75,6 @@ bool concat_str_strcat(void) {
         fprintf(stderr, "error: Invalid data.\n");
         return false;
     }
-    discard_newlines();
 
     // Getting the second string
     fprintf(stdout, "Enter the 2nd string: ");
@@ -85,16 +83,36 @@ bool concat_str_strcat(void) {
         fprintf(stderr, "error: Invalid data.\n");
         return false;
     }
-    discard_newlines();
 
-    strcat(full_str, str1);
     strcat(full_str, str2);
+    strcat(full_str, str1);
 
     fprintf(stdout, "Joined strings: %s\n", full_str);
     return true;
 }
 
 bool compare_strs(void) {
+    char str1[MAX_LEN / 2];
+    char str2[MAX_LEN / 2];
+
+    fprintf(stdout, "Enter the 1st string: ");
+
+    if (fgets(str1, sizeof str1, stdin) == NULL) {
+        fprintf(stderr, "error: Invalid data.\n");
+        return false;
+    }
+
+    // Getting the second string
+    fprintf(stdout, "Enter the 2nd string: ");
+
+    if (fgets(str2, sizeof str2, stdin) == NULL) {
+        fprintf(stderr, "error: Invalid data.\n");
+        return false;
+    }
+
+    fprintf(stdout, "The strings have %s match.\n",
+            (strcmp(str1, str2) == 0) ? "a" : "no");
+
     return true;
 }
 
@@ -107,13 +125,20 @@ bool calc_strlen(void) {
         fprintf(stderr, "error: Invalid data.\n");
         return false;
     }
-    discard_newlines();
 
+    size_t idx = 0;
     size_t len = 0;
-    while (input[len++] != 0)
-        ;
+    while (input[idx] != 0) {
+        if (input[idx] == ' ') {
+            idx++;
+            continue;
+        } else {
+            idx++;
+            len++;
+        }
+    }
 
-    fprintf(stdout, "The string has %ld characters.\n", len);
+    fprintf(stdout, "The string has %ld characters.\n", (len - 1));
 
     return true;
 }
@@ -150,11 +175,12 @@ int main(void) {
         int input = 0;
         if (fscanf(stdin, "%d", &input) != 1) {
             fprintf(stderr, "\nerror: Invalid input.\n");
-            discard_newlines();
+            discard_buffer();
             getchar();
 
             continue;
         }
+        discard_buffer();
         fputc('\n', stdout);
 
         bool status = true;
@@ -190,8 +216,6 @@ int main(void) {
                 fprintf(stderr, "error: No such option.\n");
                 break;
         }
-
-        discard_newlines();
 
         if (!status)
             fprintf(stderr, "warn: The code execution did not finish well.\n");
